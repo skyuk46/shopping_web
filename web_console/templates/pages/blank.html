@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		{% load static %}
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Electro - HTML Ecommerce Template</title>
+
+ 		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+ 		<link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+
+ 		<link type="text/css" rel="stylesheet" href="{% static 'css/slick.css' %}"/>
+ 		<link type="text/css" rel="stylesheet" href="{% static 'css/slick-theme.css' %}"/>
+
+ 		<link type="text/css" rel="stylesheet" href="{% static 'css/nouislider.min.css' %}"/>
+
+ 		<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+
+ 		<link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}"/>
+
+
+    </head>
+	<body>
+		{% load static %}
+		<header>
+			<div id="top-header">
+				<div class="container">
+					<ul class="header-links pull-left">
+						<li><a href="/blank"><i class="fa fa-phone"></i> 0347088691</a></li>
+						<li><a href="/blank"><i class="fa fa-envelope-o"></i> nguyenquocdung604@gmail.com</a></li>
+						<li><a href="https://www.google.com/maps/place/144+Xu%C3%A2n+Th%E1%BB%A7y,+Mai+D%E1%BB%8Bch,+C%E1%BA%A7u+Gi%E1%BA%A5y,+H%C3%A0+N%E1%BB%99i,+Vi%E1%BB%87t+Nam/@21.0368281,105.7804508,17z/data=!3m1!4b1!4m5!3m4!1s0x313454caaf9fa467:0x4cfd76cf514e1ce1!8m2!3d21.0368231!4d105.7826395" target = "_blank"><i class="fa fa-map-marker"></i> 144 Xuan Thuy, Cau Giay, Ha Noi</a></li>
+					</ul>
+					<ul class="header-links pull-right">
+						<li><a href = 'https://www.msn.com/vi-vn/money/currencyconverter' target = "_blank"><i class="fa fa-dollar"></i> USD</a></li>
+						<li><a href="https://accounts.google.com/signin/v2/recoveryidentifier?hl=vi&flowName=GlifWebSignIn&flowEntry=ServiceLogin" target="_blank"><i class="fa fa-user-o"></i> My Account</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div id="header">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="header-logo">
+								<a href="/" class="logo">
+									<img src="{% static './img/logo.png' %}" alt="">
+								</a>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="header-search">
+								<form action = "/search" method = "GET">
+									<select name = 'type' class="input-select">
+										<option value="0">All Categories</option>
+										<option value="1">Category 01</option>
+										<option value="2">Category 02</option>
+									</select>
+									<input class="input" name = 'input' placeholder="Search here">
+									<button type="submit" name = "submit" value = "Search" class="search-btn">Search</button>
+								</form>
+							</div>
+						</div>
+
+						<div class="col-md-3 clearfix">
+							<div class="header-ctn">
+								<div>
+									<a href="#">
+										<i class="fa fa-heart-o"></i>
+										<span>Your Wishlist</span>
+										<div class="qty">2</div>
+									</a>
+								</div>
+
+								<div class="dropdown">
+									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-shopping-cart"></i>
+										<span>Your Cart</span>
+										<div class="qty">3</div>
+									</a>
+									<div class="cart-dropdown">
+										<div class="cart-list">
+											<div class="product-widget">
+												<div class="product-img">
+													<img src="{% static './img/product01.png' %}" alt="">
+												</div>
+												<div class="product-body">
+													<h3 class="product-name"><a href="#">product name goes here</a></h3>
+													<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+												</div>
+												<button class="delete"><i class="fa fa-close"></i></button>
+											</div>
+
+											<div class="product-widget">
+												<div class="product-img">
+													<img src="{% static './img/product02.png' %}" alt="">
+												</div>
+												<div class="product-body">
+													<h3 class="product-name"><a href="#">product name goes here</a></h3>
+													<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
+												</div>
+												<button class="delete"><i class="fa fa-close"></i></button>
+											</div>
+										</div>
+										<div class="cart-summary">
+											<small>3 Item(s) selected</small>
+											<h5>SUBTOTAL: $2940.00</h5>
+										</div>
+										<div class="cart-btns">
+											<a href="/checkout">View Cart</a>
+											<a href="/checkout">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+										</div>
+									</div>
+								</div>
+
+								<div class="menu-toggle">
+									<a href="#">
+										<i class="fa fa-bars"></i>
+										<span>Menu</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<nav id="navigation">
+			<div class="container">
+				<div id="responsive-nav">
+					<ul class="main-nav nav navbar-nav">
+						<li class="active"><a href="/">Home</a></li>
+						<li><a href="#">Hot Deals</a></li>
+						<li><a href="#">Categories</a></li>
+						<li><a href="#">Laptops</a></li>
+						<li><a href="#">Smartphones</a></li>
+						<li><a href="#">Cameras</a></li>
+						<li><a href="#">Accessories</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div id="breadcrumb" class="section">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="breadcrumb-header">Regular Page</h3>
+						<ul class="breadcrumb-tree">
+							<li><a href="/">Home</a></li>
+							<li class="active">Blank</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="section">
+			<div class="container">
+				<div class="row">
+					<div>
+						<h2>Shop Information :</h2>
+					</br>
+						<p>Staff member : Nguyen Quoc Dung, Do Trung Duc, Bach Trong Dao, Vu Trong Dat</p>
+					</br>
+						<p>Phone number : 0347088691</p>
+					</br>
+						<p>Agency : 144 Xuan Thuy, Ha Noi, Viet Nam</p>
+					</br>
+						<p>Open time: 8 a.m to 18 p.m</p>
+					</br>
+						<p>Contact email : nguyenquocdung604@gmail.com</p>	
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="newsletter" class="section">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="newsletter">
+							<p>Sign Up for the <strong>NEWSLETTER</strong></p>
+							<form>
+								<input class="input" type="email" placeholder="Enter Your Email">
+								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+							</form>
+							<ul class="newsletter-follow">
+								<li>
+									<a href="https://www.facebook.com/" target="_blank"><i class="fa fa-facebook"></i></a>
+								</li>
+								<li>
+									<a href="https://twitter.com/explore" target = "_blank"><i class="fa fa-twitter"></i></a>
+								</li>
+								<li>
+									<a href="https://www.instagram.com/?hl=vi" target="_blank"><i class="fa fa-instagram"></i></a>
+								</li>
+								<li>
+									<a href="https://www.pinterest.com/" target = "_blank"><i class="fa fa-pinterest"></i></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<footer id="footer">
+			<div class="section">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-4 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">About Us</h3>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+								<ul class="footer-links">
+									<li><a href="/blank"><i class="fa fa-phone"></i> 0347088691</a></li>
+									<li><a href="/blank"><i class="fa fa-envelope-o"></i> nguyenquocdung604@gmail.com</a></li>
+									<li><a href="https://www.google.com/maps/place/144+Xu%C3%A2n+Th%E1%BB%A7y,+Mai+D%E1%BB%8Bch,+C%E1%BA%A7u+Gi%E1%BA%A5y,+H%C3%A0+N%E1%BB%99i,+Vi%E1%BB%87t+Nam/@21.0368281,105.7804508,17z/data=!3m1!4b1!4m5!3m4!1s0x313454caaf9fa467:0x4cfd76cf514e1ce1!8m2!3d21.0368231!4d105.7826395" target = "_blank"><i class="fa fa-map-marker"></i> 144 Xuan Thuy, Cau Giay, Ha Noi</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-2 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Categories</h3>
+								<ul class="footer-links">
+									<li><a href="#">Hot deals</a></li>
+									<li><a href="#">Laptops</a></li>
+									<li><a href="#">Smartphones</a></li>
+									<li><a href="#">Cameras</a></li>
+									<li><a href="#">Accessories</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="clearfix visible-xs"></div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Information</h3>
+								<ul class="footer-links">
+									<li><a href="#">About Us</a></li>
+									<li><a href="#">Contact Us</a></li>
+									<li><a href="#">Privacy Policy</a></li>
+									<li><a href="#">Orders and Returns</a></li>
+									<li><a href="#">Terms & Conditions</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Service</h3>
+								<ul class="footer-links">
+									<li><a href="https://accounts.google.com/signin/v2/recoveryidentifier?hl=vi&flowName=GlifWebSignIn&flowEntry=ServiceLogin">My Account</a></li>
+									<li><a href="#">View Cart</a></li>
+									<li><a href="#">Wishlist</a></li>
+									<li><a href="#">Track My Order</a></li>
+									<li><a href="#">Help</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="bottom-footer" class="section">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12 text-center">
+							<ul class="footer-payments">
+								<li><a href=""><i class="fa fa-cc-visa"></i></a></li>
+								<li><a href=""><i class="fa fa-credit-card"></i></a></li>
+								<li><a href=""><i class="fa fa-cc-paypal"></i></a></li>
+								<li><a href=""><i class="fa fa-cc-mastercard"></i></a></li>
+								<li><a href=""><i class="fa fa-cc-discover"></i></a></li>
+								<li><a href=""><i class="fa fa-cc-amex"></i></a></li>
+								</ul>
+							<span class="copyright">
+								Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved  
+							</span>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+
+		<script src="{% static 'js/jquery.min.js' %}"></script>
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'js/slick.min.js' %}"></script>
+		<script src="{% static 'js/nouislider.min.js' %}"></script>
+		<script src="{% static 'js/jquery.zoom.min.js' %}"></script>
+		<script src="{% static 'js/main.js' %}"></script>
+
+	</body>
+</html>
