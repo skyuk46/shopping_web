@@ -29,7 +29,6 @@ def search(request):
         # get input
         submitbutton= request.GET.get('submit')
         # get button
-        res = Products.objects.get(productCode = 5)
         if query is not None:
             # lookups= Q(title__icontains=query) | Q(content__icontains=query)
 
@@ -39,8 +38,7 @@ def search(request):
             # filter all the product which title and content has word in query in category table
             context={'results': results,
                      'submitbutton': submitbutton,
-                     'query': query,
-                     'res' : res}
+                     'query': query}
 
             return render(request, 'pages/search.html',context)
 

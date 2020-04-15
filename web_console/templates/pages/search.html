@@ -133,8 +133,6 @@
 	{% load static %}
 
 	{% if res.image != None %}
-	<img src = '{{ res.image.url }}'/>
-	<img src="{% static res.images %}" alt="">
 	{% endif %}
     {% if submitbutton == 'Search' and query != '' %}
         {% if results %}
