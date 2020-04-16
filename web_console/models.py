@@ -4,8 +4,9 @@ from django.db import models
 #from smartfields.processors import ImageProcessor
 # from sorl.thumbnail import ImageField, get_thumbnail
 # Create your models here.
+ 
 class ProductLines(models.Model):
-    productLine = models.TextField(primary_key= True)
+    productLine = models.CharField(primary_key= True, max_length= 50)
     description = models.TextField()
 
     def __str__(self):
@@ -79,5 +80,4 @@ class Feedback(models.Model):
     feedbackDate = models.DateTimeField()
 
     def __str__(self):
-        return self.feedbackDate
-    
+        return self.feedbackDate    

@@ -133,6 +133,7 @@
 	{% load static %}
 
 	{% if res.image != None %}
+		<img src = "{{ res.image.url}}" height="600" width="600">
 	{% endif %}
     {% if submitbutton == 'Search' and query != '' %}
         {% if results %}
