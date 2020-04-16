@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-# from .models import Products
+from .models import Products
 from django.http import HttpResponse 
 from .forms import *
 
