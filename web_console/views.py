@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from .models import Products
+from .models import Products, ProductLines
 from django.http import HttpResponse 
 from .forms import *
 
@@ -29,7 +29,7 @@ def search(request):
         # get input
         submitbutton= request.GET.get('submit')
         # get button
-        res = Products.objects.get(productCode = 6)
+        res = ProductLines.objects.get(productLine = 'Toy')
         if query is not None:
             # lookups= Q(title__icontains=query) | Q(content__icontains=query)
 

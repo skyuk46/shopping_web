@@ -131,10 +131,8 @@
 
 	<!-- search function -->
 	{% load static %}
-
-	{% if res.image != None %}
-		<img src = "{{ res.image.url}}" height="600" width="600">
-	{% endif %}
+	
+	{{ res.productLine}}
     {% if submitbutton == 'Search' and query != '' %}
         {% if results %}
             <h1>Results for <b>query</b></h1>
