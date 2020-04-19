@@ -15,7 +15,7 @@ class ProductLines(models.Model):
 class Products(models.Model):
     productCode = models.IntegerField(primary_key= True)
     productName = models.CharField(max_length=50)
-    product = models.ForeignKey(ProductLines, on_delete= models.CASCADE, related_name= 'Line' )
+    productLine = models.ForeignKey(ProductLines, on_delete= models.CASCADE, related_name= 'Line' )
     instock = models.IntegerField()
     sold = models.IntegerField()
     sale = models.IntegerField()
@@ -47,7 +47,7 @@ class Products(models.Model):
 class Customer(models.Model):
     userID = models.AutoField(primary_key = True)
     name = models.TextField()
-    phoneNumber = models.IntegerField()
+    phoneNumber = models.CharField(max_length= 50)
     numberOfPurchase = models.IntegerField()
     sale = models.IntegerField()
 
@@ -55,7 +55,7 @@ class Customer(models.Model):
         return self.name
 
 class Cart(models.Model):
-    cart = models.ForeignKey(Products , on_delete= models.CASCADE, related_name= 'cartCode',primary_key = True,unique = True)
+    product = models.ForeignKey(Products , on_delete= models.CASCADE, related_name= 'cartCode',primary_key = True,unique = True)
     quantity = models.IntegerField()
     totalPrice = models.IntegerField()
 
@@ -65,7 +65,7 @@ class Cart(models.Model):
 class Order(models.Model):
     orderId = models.AutoField(primary_key = True)
     orders = models.ForeignKey(Cart, on_delete= models.CASCADE, related_name= 'orderCode',default = None)
-    order = models.ForeignKey(Customer, on_delete= models.CASCADE, related_name= 'orderId')
+    customer = models.ForeignKey(Customer, on_delete= models.CASCADE, related_name= 'orderId')
     orderedDate = models.DateField()
     shippedDate = models.DateField()
     status = models.BooleanField()
@@ -74,8 +74,8 @@ class Order(models.Model):
         return self.orderedDate
 
 class Feedback(models.Model):
-    feedback = models.ForeignKey(Products, on_delete= models.CASCADE, related_name='feedbackCode')
-    feedback = models.ForeignKey(Customer, on_delete= models.CASCADE, related_name='feedbackId')
+    product = models.ForeignKey(Products, on_delete= models.CASCADE, related_name='feedbackCode',default = 1)
+    customer = models.ForeignKey(Customer, on_delete= models.CASCADE, related_name='feedbackId', default = 1)
     Content = models.TextField()
     feedbackDate = models.DateTimeField()
 
