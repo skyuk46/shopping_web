@@ -5,5 +5,6 @@ class ProductUploadForm(forms.ModelForm):
 
     class Meta:
         model = Products
-        fields = ['productCode','productName', 'productLine','instock','sold','sale','price','description','images','image']
-        # fields = '__all__' , use all the fields
+        #fields = ['productCode','productName', 'productLine','instock','sold','sale','price','description','images','image']
+        fields = '__all__' 
+        #, use all the fields
