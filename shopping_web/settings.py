@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'web_console',
+    'product_list',
  #   'smartfields',
  #  'sorl.thumbnail',
 ]

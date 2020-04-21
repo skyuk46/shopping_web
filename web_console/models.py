@@ -29,6 +29,8 @@ class Products(models.Model):
     # this method uploads the img, resize it and keep both the root and the resized image    
     
     image = models.ImageField(upload_to = 'pictures/', default = None)
+    image1 = models.ImageField(upload_to= 'pictures/',default= None)
+    image2 = models.ImageField(upload_to= 'pictures/',default= None)
     # simply upload to media/pictures/, nothing change
 
     # image = ImageField(upload_to= 'pictures/')
@@ -39,6 +41,7 @@ class Products(models.Model):
     # this method has good logic but don't know why there is an error
 
     images = models.CharField(max_length=150, default='')
+    status = models.CharField(max_length= 30,default= 'New')
 
 
     def __str__(self):

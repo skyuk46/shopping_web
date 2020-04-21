@@ -56,8 +56,12 @@
 								<form action = "/search" method = "GET">
 									<select name = 'type' class="input-select">
 										<option value="0">All Categories</option>
-										<option value="1">Category 01</option>
-										<option value="2">Category 02</option>
+										<option value="1">Toy</option>
+										<option value="2">Electronic</option>
+										<option value="3">Household</option>
+										<option value="4">Fashion</option>
+										<option value="5">Sporting</option>
+										<option value="6">Stationery</option>
 									</select>
 									<input class="input" name = 'input' placeholder="Search here">
 									<button type="submit" name = "submit" value = "Search" class="search-btn">Search</button>
@@ -134,12 +138,12 @@
 				<div id="responsive-nav">
 					<ul class="main-nav nav navbar-nav">
 						<li class="active"><a href="/">Home</a></li>
-						<li><a href="#">Hot Deals</a></li>
-						<li><a href="#">Categories</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cameras</a></li>
-						<li><a href="#">Accessories</a></li>
+						<li><a href="/store/toy">Toy</a></li>
+						<li><a href="/store/electronic">Electronic</a></li>
+						<li><a href="/store/household">Household</a></li>
+						<li><a href="/store/fashion">Fashion</a></li>
+						<li><a href="/store/sporting">Sporting</a></li>
+						<li><a href="/store/stationery">Stationery</a></li>
 					</ul>
 				</div>
 			</div>
@@ -330,7 +334,7 @@
 					<div class="col-md-12">
 						<div class="newsletter">
 							<p>Sign Up for the <strong>NEWSLETTER</strong></p>
-							<form>
+							<form action = "/subscribe">
 								<input class="input" type="email" placeholder="Enter Your Email">
 								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
 							</form>
@@ -374,11 +378,12 @@
 							<div class="footer">
 								<h3 class="footer-title">Categories</h3>
 								<ul class="footer-links">
-									<li><a href="#">Hot deals</a></li>
-									<li><a href="#">Laptops</a></li>
-									<li><a href="#">Smartphones</a></li>
-									<li><a href="#">Cameras</a></li>
-									<li><a href="#">Accessories</a></li>
+									<li><a href="/store/toy">Toy</a></li>
+									<li><a href="/store/electronic">Electronic</a></li>
+									<li><a href="/store/household">Household</a></li>
+									<li><a href="/store/fashion">Fashion</a></li>
+									<li><a href="/store/sporting">Sporting</a></li>
+									<li><a href="/store/stationery">Stationery</a></li>
 								</ul>
 							</div>
 						</div>
