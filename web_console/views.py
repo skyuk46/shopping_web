@@ -1,15 +1,29 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from .models import Products, ProductLines
-from django.http import HttpResponse 
+from .models import Products, ProductLines, Cart
+from django.http import HttpResponse, HttpResponseRedirect
 from .forms import *
+from datetime import timedelta
+import datetime
 
 # Create your views here.
 def homepage(request):
-    newToy_raw = Products.objects.filter(status = "New", productLine = "Toy")
-    newElectronic_raw = Products.objects.filter(status = "New", productLine = "Electronic")
-    newFashion_raw = Products.objects.filter(status = "New", productLine = "Fashion")
-    newStationery_raw = Products.objects.filter(status = "New", productLine = "Stationery")
+    topSellings = Products.objects.order_by('-sold')[:5]
+    # Sắp xếp Products theo thứ tự giảm dần của column sold và lấy 5 đối tượng đầu tiên
+
+    carts = []
+    try:
+        carts = Cart.objects.filter(username = request.user.get_username() )
+    except:
+        print("Not Login")
+    totalPrice = 0
+    for cart in carts:
+        totalPrice += cart.totalPrice
+    quantity = len(carts)
+    newToy_raw = Products.objects.filter(status= "New", productLine= "Toy")
+    newElectronic_raw = Products.objects.filter(status= "New", productLine= "Electronic")
+    newFashion_raw = Products.objects.filter(status= "New", productLine= "Fashion")
+    newStationery_raw = Products.objects.filter(status= "New", productLine= "Stationery")
 
     if len(newToy_raw) <= 5:
         newToy = newToy_raw
@@ -34,25 +48,96 @@ def homepage(request):
     context = { 'newToy' : newToy,
                 'newElectronic' : newElectronic,
                 'newFashion' : newFashion,
-                'newStationery' : newStationery
+                'newStationery' : newStationery,
+                'carts' : carts,
+                'totalPrice' : totalPrice,
+                'quantity' : quantity,
+                'topSellings' : topSellings,
                 }
-    return render(request, 'pages/homepage.html',context)
+    return render(request, 'pages/homepage.html', context)
 
 def blank(request):
-    return render(request, 'pages/blank.html')
+    carts = []
+    try : 
+        carts = Cart.objects.filter(username = request.user.get_username() )
+    except:
+        print("Not Login")
+    totalPrice = 0
+    for cart in carts:
+        totalPrice += cart.totalPrice
+    quantity = len(carts)
+
+    context = { 'carts' : carts,
+                'totalPrice' : totalPrice,
+                'quantity' : quantity
+                }
+    return render(request, 'pages/blank.html', context)
 
 def checkout(request):
-    return render(request, 'pages/checkout.html')
+    carts = []
+    try : 
+        carts = Cart.objects.filter(username = request.user.get_username() )
+    except:
+        print("Not Login")
+    totalPrice = 0
+    for cart in carts:
+        totalPrice += cart.totalPrice
+    quantity = len(carts)
+    totalPriceWithShip = totalPrice + 5
+
+    context = { 'carts' : carts,
+                'totalPrice' : totalPrice,
+                'quantity' : quantity,
+                'totalPriceWithShip' : totalPriceWithShip
+                }
+
+    return render(request, 'pages/checkout.html',context)
 
 def product(request):
+    carts = []
+    try : 
+        carts = Cart.objects.filter(username = request.user.get_username() )
+    except:
+        print("Not Login")
+    totalPrice = 0
+    for cart in carts:
+        totalPrice += cart.totalPrice
+    quantity = len(carts)
+
     name = request.GET.get('product')
     product = Products.objects.get(productName = name)
-    return render(request, 'pages/product.html',{'product': product })
+
+    relatedProducts = Products.objects.filter(productLine = product.productLine)
+    relatedProducts = relatedProducts.order_by('-sold')[:5]
+    # Lọc ra những đối tượng có cùng productLine với product sau đó sắp theo theo thứ tự giảm dần của column sold và lấy 5 đối tượng đầu
+
+    context = { 'carts' : carts,
+                'totalPrice' : totalPrice,
+                'quantity' : quantity,
+                'product' : product,
+                'relatedProducts' : relatedProducts
+                }
+    return render(request, 'pages/product.html',context )
 
 def subscribe(request):
     return HttpResponse("Succesfully subscribe!")
 
 def search(request):
+
+    carts = []
+    try : 
+        carts = Cart.objects.filter(username = request.user.get_username() )
+    except:
+        print("Not Login")
+    totalPrice = 0
+    for cart in carts:
+        totalPrice += cart.totalPrice
+    quantity = len(carts)
+    context1 = { 'carts' : carts,
+                'totalPrice' : totalPrice,
+                'quantity' : quantity,
+                'product' : product
+                }
 
     if request.method == 'GET':
         category = request.GET.get('type')
@@ -83,15 +168,19 @@ def search(request):
             # filter all the product which title and content has word in query in category table
             context={'results': results,
                      'submitbutton': submitbutton,
-                     'query': query}
+                     'query': query,
+                     'carts' : carts,
+                     'totalPrice' : totalPrice,
+                     'quantity' : quantity
+                     }
 
             return render(request, 'pages/search.html',context)
 
         else:
-            return render(request, 'pages/search.html')
+            return render(request, 'pages/search.html',context1)
 
     else:
-        return render(request, 'pages/search.html')    
+        return render(request, 'pages/search.html',context1)    
 
 def upload(request):
 
@@ -104,5 +193,75 @@ def upload(request):
 	else: 
 	    form = ProductUploadForm() 
 	return render(request, 'pages/upload.html', {'form' : form}) 
+
+def register(request):
+
+    if request.method == "POST":
+        form = CustomerRegisterForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
+    else: 
+	    form = CustomerRegisterForm() 
+    return render(request, 'pages/customerRegister.html', {'form' : form})
+
+def addToCart(request):
+
+    if request.method == "GET":
+        quantity = int(request.GET.get("quantity"))
+        productCode = request.GET.get("productCode")
+        salePrice = request.GET.get("sale")
+        user = request.user.get_username()
+        if user == "" :
+            return HttpResponse("Add fail! Please Login")
+        product = Products.objects.get(productCode = productCode)
+        totalPrice = int(salePrice) * quantity
+        id = 1
+        if Cart.objects.last():
+            id = Cart.objects.last().id + 1
+        cart = Cart(id,user,productCode, quantity, totalPrice)
+        cart.save()
+        return HttpResponse("Added to Cart")
+
+def deleteCartItem(request):
+
+    if request.method == "GET":
+        id = int(request.GET.get('cart_product'))
+        Cart.objects.get(id = id).delete()
+        return HttpResponse('Deleted item from cart')
+
+def placeOrder(request):
+    if request.user.get_username() == "":
+        return HttpResponse('Please login to place order!')
+    else:
+        username = request.user.get_username()
+        #Save customer information
+        name = request.GET.get('first-name') + " " + request.GET.get('last-name')
+        email = request.GET.get('email')
+        phoneNumber = request.GET.get('tel')
+        if Customer.objects.get(username = username):
+            customer = Customer.objects.get(username = username)
+            customer.numberOfPurchase = customer.numberOfPurchase + 1
+        else:
+            customer = Customer(username = username,name = name, email = email, phoneNumber = phoneNumber, numberOfPurchase = 1)
+        customer.save()
+
+
+        #Save order information
+        carts = Cart.objects.filter(username = username)
+        orderedDate = datetime.date.today()
+        shippedDate = datetime.date.today() + timedelta(days= 7)
+        status = False
+        address = request.GET.get('address')
+        city = request.GET.get('city')
+        country = request.GET.get('country')
+        orderNote = request.GET.get('orderNote')
+        for cart in carts :
+            product = Products.objects.get(productCode = int(cart.product.productCode))
+            cus = Customer.objects.get(username = username)
+            Order(product_cart = product,customer = cus,orderedDate = orderedDate,shippedDate = shippedDate,status = status,address = address,city = city,country = country,orderNote = orderNote).save()
+            cart.delete()
+        return HttpResponse('Your order has been placed. Thank you for Buying !')
 
 

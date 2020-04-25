@@ -35,7 +35,17 @@
 					</ul>
 					<ul class="header-links pull-right">
 						<li><a href = 'https://www.msn.com/vi-vn/money/currencyconverter' target = "_blank"><i class="fa fa-dollar"></i> USD</a></li>
-						<li><a href="https://accounts.google.com/signin/v2/recoveryidentifier?hl=vi&flowName=GlifWebSignIn&flowEntry=ServiceLogin" target="_blank"><i class="fa fa-user-o"></i> My Account</a></li>
+						<li>
+							{% if user.username == "" %}
+							<a href="/login"><i class="fa fa-user-o"></i> Login</a>
+							{% endif %}
+						</li>
+						<li><a href = "/customerRegister">Register</a></li>
+						<li>
+							{% if user.username %}
+								<a href = "/logout">Logout</a>
+							{% endif %}
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -46,7 +56,7 @@
 						<div class="col-md-3">
 							<div class="header-logo">
 								<a href="/" class="logo">
-									<img src="{% static './img/logo.png' %}" alt="">
+									<img src="{% static './img/logo3.png'%}" alt="" width="250" height="80" >
 								</a>
 							</div>
 						</div>
@@ -71,47 +81,43 @@
 
 						<div class="col-md-3 clearfix">
 							<div class="header-ctn">
-								<div>
-									<a href="#">
-										<i class="fa fa-heart-o"></i>
-										<span>Your Wishlist</span>
-										<div class="qty">2</div>
-									</a>
-								</div>
 
 								<div class="dropdown">
 									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 										<i class="fa fa-shopping-cart"></i>
 										<span>Your Cart</span>
-										<div class="qty">3</div>
+										<div class="qty">{{ quantity }}</div>
 									</a>
 									<div class="cart-dropdown">
 										<div class="cart-list">
+											{% for cart in carts %}
 											<div class="product-widget">
-												<div class="product-img">
-													<img src="{% static './img/product01.png' %}" alt="">
-												</div>
+												<!-- Click image to goto product page -->
+												<form action="/product" method="GET">
+													<button>
+														<div class="product-img">
+															<img src="{{cart.product.image.url}}" alt="">
+														</div>
+													</button>
+													<input type="hidden" name="product" value="{{cart.product.productName}}"/>
+												</form>
+												<!-- Click image to goto product page -->
 												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+													<h3 class="product-name">{{ cart.product.productName }}</h3>
+													<h4 class="product-price"><span class="qty">{{ cart.quantity }}x</span>$ {{ cart.product.salePrice }} </h4>
 												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
+												<!-- delete item from cart-->
+												<form action="/deleteCartItem">
+													<button class="delete"><i class="fa fa-close"></i></button>
+													<input type="hidden" name="cart_product" value="{{cart.id}}"/>
+												</form>
+												<!-- delete item from cart-->
 											</div>
-
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="{% static './img/product02.png' %}" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
+											{% endfor %}
 										</div>
 										<div class="cart-summary">
-											<small>3 Item(s) selected</small>
-											<h5>SUBTOTAL: $2940.00</h5>
+											<small>{{ quantity }} Item(s) selected</small>
+											<h5>SUBTOTAL: $ {{ totalPrice }}</h5>
 										</div>
 										<div class="cart-btns">
 											<a href="/checkout">View Cart</a>
@@ -223,7 +229,7 @@
 								<a class="review-link" href="#tab2">10 Review(s) | Add your review</a>
 							</div>
 							<div>
-								<h3 class="product-price">$ {{ product.price }}</h3>
+								<h3 class="product-price">$ {{ product.salePrice }} <del class="product-old-price">${{ product.price }}</del></h3>
 								<span class="product-available">
 									{% if product.instock > 0 %}
 										<p> In Stock </p>
@@ -235,15 +241,19 @@
 							<p>{{ product.description }}</p>
 
 							<div class="add-to-cart">
-								<div class="qty-label">
-									Qty
-									<div class="input-number">
-										<input type="number">
-										<span class="qty-up">+</span>
-										<span class="qty-down">-</span>
+								<form action ="addToCart/" method="GET" >
+									<div class="qty-label">
+										Qty
+										<div class="input-number">
+											<input type="number" name = "quantity">
+											<span class="qty-up">+</span>
+											<span class="qty-down">-</span>
+										</div>
 									</div>
-								</div>
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+									<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+									<input type = "hidden" name = "productCode" value = "{{ product.productCode }}" />
+									<input type = "hidden" name = "sale" value = "{{ product.salePrice }}" />
+								</form>
 							</div>
 
 							<ul class="product-links">
@@ -265,7 +275,7 @@
 								<div id="tab1" class="tab-pane fade in active">
 									<div class="row">
 										<div class="col-md-12">
-											<p>{{ product.description }}/p>
+											<p>{{ product.description }} </p>
 										</div>
 									</div>
 								</div>
@@ -450,154 +460,64 @@
 				<div class="row">
 
 					<div class="col-md-12">
-						<div class="section-title text-center">
+						<div class="section-title">
 							<h3 class="title">Related Products</h3>
 						</div>
 					</div>
 
-					<div class="col-md-3 col-xs-6">
-						<div class="product">
-							<div class="product-img">
-								<img src="{% static './img/product01.png' %}" alt="">
-								<div class="product-label">
-									<span class="sale">-30%</span>
-								</div>
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								<div class="product-rating">
-								</div>
-								<div class="product-btns">
-									<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-									<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-									<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-								</div>
-							</div>
-							<div class="add-to-cart">
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 col-xs-6">
-						<div class="product">
-							<div class="product-img">
-								<img src="{% static './img/product02.png' %}" alt="">
-								<div class="product-label">
-									<span class="new">NEW</span>
-								</div>
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								<div class="product-rating">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-								</div>
-								<div class="product-btns">
-									<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-									<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-									<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-								</div>
-							</div>
-							<div class="add-to-cart">
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-							</div>
-						</div>
-					</div>
-
-					<div class="clearfix visible-sm visible-xs"></div>
-
-					<div class="col-md-3 col-xs-6">
-						<div class="product">
-							<div class="product-img">
-								<img src="{% static './img/product03.png' %}" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								<div class="product-rating">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star-o"></i>
-								</div>
-								<div class="product-btns">
-									<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-									<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-									<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-								</div>
-							</div>
-							<div class="add-to-cart">
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 col-xs-6">
-						<div class="product">
-							<div class="product-img">
-								<img src="{% static './img/product04.png' %}" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								<div class="product-rating">
-								</div>
-								<div class="product-btns">
-									<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-									<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-									<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-								</div>
-							</div>
-							<div class="add-to-cart">
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-
-		<div id="newsletter" class="section">
-			<div class="container">
-				<div class="row">
 					<div class="col-md-12">
-						<div class="newsletter">
-							<p>Sign Up for the <strong>NEWSLETTER</strong></p>
-							<form action = "/subscribe">
-								<input class="input" type="email" placeholder="Enter Your Email">
-								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
-							</form>
-							<ul class="newsletter-follow">
-								<li>
-									<a href="https://www.facebook.com/" target="_blank"><i class="fa fa-facebook"></i></a>
-								</li>
-								<li>
-									<a href="https://twitter.com/explore" target = "_blank"><i class="fa fa-twitter"></i></a>
-								</li>
-								<li>
-									<a href="https://www.instagram.com/?hl=vi" target="_blank"><i class="fa fa-instagram"></i></a>
-								</li>
-								<li>
-									<a href="https://www.pinterest.com/" target = "_blank"><i class="fa fa-pinterest"></i></a>
-								</li>
-							</ul>
+						<div class="row">
+							<div class="products-tabs">
+								<div id="tab2" class="tab-pane fade in active">
+									<div class="products-slick" data-nav="#slick-nav-2">
+										{% for relatedProduct in relatedProducts %}
+										<form action="/product" method="GET">
+											<div class="product">
+												<div class="product-img">
+													<button>
+														<div class="product-img">
+															<img src="{{relatedProduct.image.url}}" alt="" height = "400" width="400">
+														</div>
+													</button>
+														<div class="product-label">
+														<span class="sale">-{{ relatedProduct.sale }}%</span>
+														<span class="new">{{ relatedProduct.status }}</span>
+													</div>
+												</div>
+												<div class="product-body">
+													<p class="product-category">{{ relatedProduct.productLine }}</p>
+													<h3 class="product-name">{{ relatedProduct.productName }}</h3>
+													<h4 class="product-price">$ {{ relatedProduct.salePrice }} <del class="product-old-price">${{ relatedProduct.price }}</del></h4>
+													<div class="product-rating">
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+													</div>
+													<div class="product-btns">
+														<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+														<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+														<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+													</div>
+												</div>
+												<input type="hidden" name="product" value="{{relatedProduct.productName}}"/>
+												<div class="add-to-cart">
+													<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> More Information</button>
+												</div>
+											</div>
+										</form>
+										{% endfor %}
+									</div>
+									<div id="slick-nav-2" class="products-slick-nav"></div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
 
 		<footer id="footer">
 			<div class="section">
@@ -635,24 +555,22 @@
 							<div class="footer">
 								<h3 class="footer-title">Information</h3>
 								<ul class="footer-links">
-									<li><a href="#">About Us</a></li>
-									<li><a href="#">Contact Us</a></li>
-									<li><a href="#">Privacy Policy</a></li>
-									<li><a href="#">Orders and Returns</a></li>
-									<li><a href="#">Terms & Conditions</a></li>
+									<li><a href="/blank">About Us</a></li>
+									<li><a href="/blank">Contact Us</a></li>
+									<li><a href="/blank">Privacy Policy</a></li>
+									<li><a href="/blank">Orders and Returns</a></li>
+									<li><a href="/blank">Terms & Conditions</a></li>
 								</ul>
 							</div>
 						</div>
-	
+
 						<div class="col-md-3 col-xs-6">
 							<div class="footer">
 								<h3 class="footer-title">Service</h3>
 								<ul class="footer-links">
-									<li><a href="https://accounts.google.com/signin/v2/recoveryidentifier?hl=vi&flowName=GlifWebSignIn&flowEntry=ServiceLogin">My Account</a></li>
-									<li><a href="#">View Cart</a></li>
-									<li><a href="#">Wishlist</a></li>
-									<li><a href="#">Track My Order</a></li>
-									<li><a href="#">Help</a></li>
+									<li><a href="/login">My Account</a></li>
+									<li><a href="/checkout">View Cart</a></li>
+									<li><a href="/blank">Help</a></li>
 								</ul>
 							</div>
 						</div>

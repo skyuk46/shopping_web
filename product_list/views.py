@@ -1,9 +1,20 @@
 from django.shortcuts import render
-from web_console.models import Products
+from web_console.models import Products, Cart
 
 # Create your views here.
 def store(request,productLine):
+    carts = []
+    try : 
+        carts = Cart.objects.filter(username = request.user.get_username() )
+    except:
+        print("Not Login")
+    totalPrice = 0
+    for cart in carts:
+        totalPrice += cart.totalPrice
+    quantity = len(carts)
+
     products = Products.objects.filter(productLine = productLine)
+    topSellings = products.order_by('-sold')[:5]
     length = len(products)
     count = 0
     tab1 = 0
@@ -34,5 +45,5 @@ def store(request,productLine):
                 product3 = products[tab2 : tab3]
                 tab4 = length
                 products4 = products[tab3 : tab4]
-    return render(request, 'pages/store.html',{'products': products, 'productLine': productLine,'length': length, 'count': count, 'tab1' : tab1,'tab2' : tab2,'tab3' : tab3,'tab4' : tab4,'product1': product1,'product2': product2,'product3': product3,'product4': product4})
+    return render(request, 'pages/store.html',{'topSellings' : topSellings,'carts' : carts,'totalPrice' : totalPrice,'quantity' : quantity,'products': products, 'productLine': productLine,'length': length, 'count': count, 'tab1' : tab1,'tab2' : tab2,'tab3' : tab3,'tab4' : tab4,'product1': product1,'product2': product2,'product3': product3,'product4': product4})
 

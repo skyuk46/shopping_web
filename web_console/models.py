@@ -42,23 +42,26 @@ class Products(models.Model):
 
     images = models.CharField(max_length=150, default='')
     status = models.CharField(max_length= 30,default= 'New')
-
+    
+    # calculate price after sale
+    def salePrice(self):
+        return int(self.price - self.price / 100 * self.sale)
 
     def __str__(self):
         return self.productName
 
 class Customer(models.Model):
-    userID = models.AutoField(primary_key = True)
-    name = models.TextField()
+    username = models.CharField(max_length= 50,primary_key = True)
+    name = models.CharField(max_length= 50)
     phoneNumber = models.CharField(max_length= 50)
-    numberOfPurchase = models.IntegerField()
-    sale = models.IntegerField()
+    numberOfPurchase = models.IntegerField(default= 0)
+    email = models.CharField(max_length=100, default = None)
 
     def __str__(self):
         return self.name
-
 class Cart(models.Model):
-    product = models.ForeignKey(Products , on_delete= models.CASCADE, related_name= 'cartCode',primary_key = True,unique = True)
+    username = models.CharField(max_length= 50, default= None)
+    product = models.ForeignKey(Products , on_delete= models.CASCADE, related_name= 'cartCode',unique = True)
     quantity = models.IntegerField()
     totalPrice = models.IntegerField()
 
@@ -67,11 +70,15 @@ class Cart(models.Model):
 
 class Order(models.Model):
     orderId = models.AutoField(primary_key = True)
-    orders = models.ForeignKey(Cart, on_delete= models.CASCADE, related_name= 'orderCode',default = None)
-    customer = models.ForeignKey(Customer, on_delete= models.CASCADE, related_name= 'orderId')
+    product_cart = models.ForeignKey(Products, on_delete= models.CASCADE, related_name= 'productCart',default = None)
+    customer = models.ForeignKey(Customer, on_delete= models.CASCADE, related_name= 'order', db_column = 'customer')
     orderedDate = models.DateField()
     shippedDate = models.DateField()
     status = models.BooleanField()
+    address = models.CharField(max_length= 100, default= None)
+    city = models.CharField(max_length=30, default=None)
+    country = models.CharField(max_length= 30, default=None)
+    orderNote = models.CharField(max_length=200, default="No note")
 
     def __str__(self):
         return self.orderedDate

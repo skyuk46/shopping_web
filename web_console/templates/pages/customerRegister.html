@@ -1,0 +1,57 @@
+<!DOCTYPE html> 
+<html lang="en">
+{% load static %}
+<head> 
+	<meta charset="UTF-8"> 
+	<title>Register Account</title> 
+	<link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}"/>
+
+	<style>
+        body {
+            background-image: url({% static './img/17515.jpg'%} );
+            background-repeat: no-repeat;
+        }
+    
+        #register {
+            background-image: url({% static './img/Banner-SP-ILL2.jpg' %} );
+			padding-top : 20px;
+			padding-bottom: 20px;
+        }
+
+        p {
+            color : red;
+        }
+
+        h1 {
+            color : red;
+        }
+
+        #acc {
+            color : gray;
+        }
+    </style>    
+</head> 
+<body>
+	<div class = 'container'>
+		<div class = 'row'>
+			<div class= 'col-md-3'></div>
+	
+			<div class= 'col-md-6' id = "register" align = "center">
+				<form method = "post" enctype="multipart/form-data"> 
+					<h1>Đăng ký</h1>
+					{% csrf_token %} 
+					{{ form.as_p }} 
+					<!-- put all form element into <p> tag -->
+					<button type="submit">Đăng ký</button> 
+					</br>
+					<a href="/login" id = 'acc'> Already had account? Login Here!</a>
+					</br>
+				</form> 
+			</div>
+	
+			<div class= 'col-md-3'></div>
+		</div>
+	</div>
+
+</body> 
+</html> 

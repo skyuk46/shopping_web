@@ -88,6 +88,7 @@ DATABASES = {
         'PASSWORD': '1nJUYXGJH0',
         'HOST': 'remotemysql.com',
         'PORT': '3306',
+        'STORAGE_ENGINE': 'MyISAM / INNODB / ETC',
     }
 }
 
