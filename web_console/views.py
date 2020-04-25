@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from .models import Products, ProductLines, Cart
+from .models import Products, ProductLines, Cart, Feedback
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import *
 from datetime import timedelta
@@ -111,11 +111,61 @@ def product(request):
     relatedProducts = relatedProducts.order_by('-sold')[:5]
     # Lọc ra những đối tượng có cùng productLine với product sau đó sắp theo theo thứ tự giảm dần của column sold và lấy 5 đối tượng đầu
 
+    # Lọc ra những feedback của product này
+    feedbacks = Feedback.objects.filter(product = product.productCode)
+    numberOfFeedback = len(feedbacks)
+    sumRating = 0
+    fiveStarRating = 0
+    fourStarRating = 0
+    threeStarRating = 0
+    twoStarRating = 0
+    oneStarRating = 0
+    for feedback in feedbacks:
+        sumRating += feedback.rating
+        if feedback.rating == 5:
+            fiveStarRating += 1
+        elif feedback.rating == 4:
+            fourStarRating += 1
+        elif feedback.rating == 3:
+            threeStarRating += 1
+        elif feedback.rating == 2:
+            twoStarRating += 1
+        else:
+            oneStarRating += 1
+    if numberOfFeedback != 0 :
+        averageRating = sumRating/numberOfFeedback
+        fiveStarRatingPercent = fiveStarRating/numberOfFeedback * 100
+        fourStarRatingPercent = fourStarRating/numberOfFeedback * 100
+        threeStarRatingPercent = threeStarRating/numberOfFeedback * 100
+        twoStarRatingPercent = twoStarRating/numberOfFeedback * 100
+        oneStarRatingPercent = oneStarRating/numberOfFeedback * 100
+    else:
+        averageRating = 5
+        fiveStarRatingPercent = 0
+        fourStarRatingPercent = 0
+        threeStarRatingPercent = 0
+        twoStarRatingPercent = 0
+        oneStarRatingPercent = 0
+
     context = { 'carts' : carts,
                 'totalPrice' : totalPrice,
                 'quantity' : quantity,
                 'product' : product,
-                'relatedProducts' : relatedProducts
+                'relatedProducts' : relatedProducts,
+                'feedbacks' : feedbacks,
+                'averageRating' : averageRating,
+                'numberOfFeedback' : numberOfFeedback,
+                'fiveStarRating' : fiveStarRating,
+                'fourStarRating' : fourStarRating,
+                'threeStarRating' : threeStarRating,
+                'twoStarRating' : twoStarRating,
+                'oneStarRating' : oneStarRating,
+                'rangeAverageRating' : range(int(averageRating)),
+                'fiveStarRatingPercent' : fiveStarRatingPercent,
+                'fourStarRatingPercent' : fourStarRatingPercent,
+                'threeStarRatingPercent' : threeStarRatingPercent,
+                'twoStarRatingPercent' : twoStarRatingPercent,
+                'oneStarRatingPercent' : oneStarRatingPercent
                 }
     return render(request, 'pages/product.html',context )
 
@@ -264,4 +314,22 @@ def placeOrder(request):
             cart.delete()
         return HttpResponse('Your order has been placed. Thank you for Buying !')
 
+def feedback(request):
+    
+    if request.method == "GET":
+        name = request.GET.get('customer')
+        try:
+            customer = Customer.objects.get(name = name)
+        except:
+            return HttpResponse('Please Buy One Item To Add Feedback')
+        productCode = request.GET.get('productCode')
+        product = Products.objects.get(productCode = productCode)
+        content = request.GET.get('content')
+        feedbackDate = datetime.date.today()
+        rating = int(request.GET.get('rating'))
+        feedback = Feedback(product = product,customer = customer,Content = content,feedbackDate = feedbackDate,rating = rating)
+        feedback.save()
+        return HttpResponse('Successfully Submit Feedback')
+    else:
+        return HttpResponse('Please go to product page to add feedback')
 

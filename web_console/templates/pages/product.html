@@ -143,7 +143,7 @@
 			<div class="container">
 				<div id="responsive-nav">
 					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
+						<li><a href="/">Home</a></li>
 						<li><a href="/store/toy">Toy</a></li>
 						<li><a href="/store/electronic">Electronic</a></li>
 						<li><a href="/store/household">Household</a></li>
@@ -226,7 +226,7 @@
 									<i class="fa fa-star"></i>
 									<i class="fa fa-star-o"></i>
 								</div>
-								<a class="review-link" href="#tab2">10 Review(s) | Add your review</a>
+								<p class="review-link">{{ numberOfFeedback }} Review(s)</p>
 							</div>
 							<div>
 								<h3 class="product-price">$ {{ product.salePrice }} <del class="product-old-price">${{ product.price }}</del></h3>
@@ -258,8 +258,8 @@
 
 							<ul class="product-links">
 								<li>Category:</li>
-								<li><a href="#">{{ product.productLine }}</a></li>
-								<li><a href="#">Accessories</a></li>
+								<li>{{ product.productLine }}</li>
+								<li>Accessories</li>
 							</ul>
 						</div>
 					</div>
@@ -268,7 +268,7 @@
 						<div id="product-tab">
 							<ul class="tab-nav">
 								<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
-								<li><a data-toggle="tab" href="#tab2">Reviews (3)</a></li>
+								<li><a data-toggle="tab" href="#tab2">Reviews ({{ numberOfFeedback}})</a></li>
 							</ul>
 
 							<div class="tab-content">
@@ -285,13 +285,11 @@
 										<div class="col-md-3">
 											<div id="rating">
 												<div class="rating-avg">
-													<span>4.5</span>
+													<span>{{ averageRating }}</span>
 													<div class="rating-stars">
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star-o"></i>
+														{% for i in rangeAverageRating %}
+															<i class="fa fa-star"></i>
+														{% endfor %}
 													</div>
 												</div>
 												<ul class="rating">
@@ -304,9 +302,9 @@
 															<i class="fa fa-star"></i>
 														</div>
 														<div class="rating-progress">
-															<div style="width: 80%;"></div>
+															<div style="width: {{ fiveStarRatingPercent }}%;"></div>
 														</div>
-														<span class="sum">3</span>
+														<span class="sum">{{ fiveStarRating }}</span>
 													</li>
 													<li>
 														<div class="rating-stars">
@@ -317,9 +315,9 @@
 															<i class="fa fa-star-o"></i>
 														</div>
 														<div class="rating-progress">
-															<div style="width: 60%;"></div>
+															<div style="width: {{ fourStarRatingPercent }}%;"></div>
 														</div>
-														<span class="sum">2</span>
+														<span class="sum">{{ fourStarRating }}</span>
 													</li>
 													<li>
 														<div class="rating-stars">
@@ -330,9 +328,9 @@
 															<i class="fa fa-star-o"></i>
 														</div>
 														<div class="rating-progress">
-															<div></div>
+															<div style="width: {{ threeStarRatingPercent }}%;"></div>
 														</div>
-														<span class="sum">0</span>
+														<span class="sum">{{ threeStarRating }}</span>
 													</li>
 													<li>
 														<div class="rating-stars">
@@ -343,9 +341,9 @@
 															<i class="fa fa-star-o"></i>
 														</div>
 														<div class="rating-progress">
-															<div></div>
+															<div style="width: {{ twoStarRatingPercent }}%;"></div>
 														</div>
-														<span class="sum">0</span>
+														<span class="sum">{{ twoStarRating }}</span>
 													</li>
 													<li>
 														<div class="rating-stars">
@@ -356,9 +354,9 @@
 															<i class="fa fa-star-o"></i>
 														</div>
 														<div class="rating-progress">
-															<div></div>
+															<div style="width: {{ oneStarRatingPercent }}%;"></div>
 														</div>
-														<span class="sum">0</span>
+														<span class="sum">{{ oneStarRating }}</span>
 													</li>
 												</ul>
 											</div>
@@ -367,71 +365,32 @@
 										<div class="col-md-6">
 											<div id="reviews">
 												<ul class="reviews">
+													{% for feedback in feedbacks %}
 													<li>
 														<div class="review-heading">
-															<h5 class="name">John</h5>
-															<p class="date">27 DEC 2018, 8:0 PM</p>
+															<h5 class="name">{{ feedback.customer.name }}</h5>
+															<p class="date">{{ feedback.feedbackDate }}</p>
 															<div class="review-rating">
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star-o empty"></i>
+																{{ feedback.rating }} <i class="fa fa-star"></i> {{ feedback.notRating}} <i class="fa fa-star-o empty"></i>
 															</div>
 														</div>
 														<div class="review-body">
-															<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+															<p>{{ feedback.Content }}</p>
 														</div>
 													</li>
-													<li>
-														<div class="review-heading">
-															<h5 class="name">John</h5>
-															<p class="date">27 DEC 2018, 8:0 PM</p>
-															<div class="review-rating">
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star-o empty"></i>
-															</div>
-														</div>
-														<div class="review-body">
-															<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-														</div>
-													</li>
-													<li>
-														<div class="review-heading">
-															<h5 class="name">John</h5>
-															<p class="date">27 DEC 2018, 8:0 PM</p>
-															<div class="review-rating">
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star-o empty"></i>
-															</div>
-														</div>
-														<div class="review-body">
-															<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-														</div>
-													</li>
+													{% endfor %}
 												</ul>
 												<ul class="reviews-pagination">
 													<li class="active">1</li>
-													<li><a href="#">2</a></li>
-													<li><a href="#">3</a></li>
-													<li><a href="#">4</a></li>
-													<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
 												</ul>
 											</div>
 										</div>
 
 										<div class="col-md-3">
 											<div id="review-form">
-												<form class="review-form">
-													<input class="input" type="text" placeholder="Your Name">
-													<input class="input" type="email" placeholder="Your Email">
-													<textarea class="input" placeholder="Your Review"></textarea>
+												<form class="review-form" action = "/feedback" method="GET">
+													<input class="input" type="text" name = "customer" placeholder="Your Name">
+													<textarea class="input" name = "content" placeholder="Your Review"></textarea>
 													<div class="input-rating">
 														<span>Your Rating: </span>
 														<div class="stars">
@@ -443,6 +402,7 @@
 														</div>
 													</div>
 													<button class="primary-btn">Submit</button>
+													<input type="hidden" name = 'productCode' value="{{ product.productCode }}" />
 												</form>
 											</div>
 										</div>

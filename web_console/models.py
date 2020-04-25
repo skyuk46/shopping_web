@@ -88,6 +88,9 @@ class Feedback(models.Model):
     customer = models.ForeignKey(Customer, on_delete= models.CASCADE, related_name='feedbackId', default = 1)
     Content = models.TextField()
     feedbackDate = models.DateTimeField()
+    rating = models.IntegerField(default= 0)
 
+    def notRating(self):
+        return 5 - self.rating
     def __str__(self):
         return self.feedbackDate    
