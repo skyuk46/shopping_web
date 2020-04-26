@@ -267,12 +267,20 @@ def addToCart(request):
             return HttpResponse("Add fail! Please Login")
         product = Products.objects.get(productCode = productCode)
         totalPrice = int(salePrice) * quantity
+        try:
+            cart = Cart.objects.get(product = productCode, username = user)
+            cart.quantity += quantity
+            cart.totalPrice += int(salePrice) * quantity
+            cart.save()
+            return redirect('/checkout')
+        except:
+            print('Does not exist in cart')
         id = 1
         if Cart.objects.last():
             id = Cart.objects.last().id + 1
         cart = Cart(id,user,productCode, quantity, totalPrice)
         cart.save()
-        return HttpResponse("Added to Cart")
+        return redirect('/checkout')
 
 def deleteCartItem(request):
 

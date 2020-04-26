@@ -61,7 +61,7 @@ class Customer(models.Model):
         return self.name
 class Cart(models.Model):
     username = models.CharField(max_length= 50, default= None)
-    product = models.ForeignKey(Products , on_delete= models.CASCADE, related_name= 'cartCode',unique = True)
+    product = models.ForeignKey(Products , on_delete= models.CASCADE, related_name= 'cartCode')
     quantity = models.IntegerField()
     totalPrice = models.IntegerField()
 
