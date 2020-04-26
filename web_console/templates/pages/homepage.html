@@ -41,6 +41,11 @@
 							{% endif %}
 						</li>
 						<li><a href = "/customerRegister">Register</a></li>
+						<li> 
+							{% if user.username %}
+								<a href="/" > <i class = "fa fa-user-o"></i> {{ user.username }} </a>
+							{% endif %}
+						</li>
 						<li>
 							{% if user.username %}
 								<a href = "/logout">Logout</a>
@@ -237,7 +242,7 @@
 														</button>
 														<div class="product-body">
 															<p class="product-category">{{ toy.productLine }}</p>
-															<h3 class="product-name">toy.productName</h3>
+															<h3 class="product-name">{{ toy.productName }}</h3>
 															<h4 class="product-price">$ {{ toy.salePrice }} <del class="product-old-price">${{ toy.price }}</del></h4>
 															<div class="product-rating">
 																<i class="fa fa-star"></i>
@@ -284,7 +289,7 @@
 														</button>
 														<div class="product-body">
 															<p class="product-category">{{ electronic.productLine }}</p>
-															<h3 class="product-name">electronic.productName</h3>
+															<h3 class="product-name">{{ electronic.productName }}</h3>
 															<h4 class="product-price">$ {{ electronic.salePrice }} <del class="product-old-price">${{ electronic.price }}</del></h4>
 															<div class="product-rating">
 																<i class="fa fa-star"></i>
@@ -331,7 +336,7 @@
 														</button>
 														<div class="product-body">
 															<p class="product-category">{{ fashion.productLine }}</p>
-															<h3 class="product-name">fashion.productName</h3>
+															<h3 class="product-name">{{ fashion.productName }}</h3>
 															<h4 class="product-price">$ {{ fashion.salePrice }} <del class="product-old-price">${{ fashion.price }}</del></h4>
 															<div class="product-rating">
 																<i class="fa fa-star"></i>
@@ -378,7 +383,7 @@
 														</button>
 														<div class="product-body">
 															<p class="product-category">{{ stationery.productLine }}</p>
-															<h3 class="product-name">stationery.productName</h3>
+															<h3 class="product-name">{{ stationery.productName }}</h3>
 															<h4 class="product-price">$ {{ stationery.salePrice }} <del class="product-old-price">${{ stationery.price }}</del></h4>
 															<div class="product-rating">
 																<i class="fa fa-star"></i>

@@ -41,6 +41,11 @@
 							{% endif %}
 						</li>
 						<li><a href = "/customerRegister">Register</a></li>
+						<li> 
+							{% if user.username %}
+								<a href="/" > <i class = "fa fa-user-o"></i> {{ user.username }} </a>
+							{% endif %}
+						</li>
 						<li>
 							{% if user.username %}
 								<a href = "/logout">Logout</a>
@@ -176,7 +181,9 @@
 						<div class="col-md-7">
 							<div class="billing-details">
 								<div class="section-title">
-									<h4>If this is your first purchase, please fill the information blank - if you used to buy from us, just press "Place Order" to order!</h4>
+									<h1>Note</h1>
+									<h4>If this is your first time,fill the information carefully,we'll save it, next time you need to fill that information to buy from this account, or else please register another account</h4>
+									<h4>If this is not your first time purchasing please enter your information of this account correctly to place order or you will get error</h4><h3> 1 information for 1 account only </h3>
 									<h3 class="title">Billing address</h3>
 								</div>
 								<div class="form-group">
@@ -242,6 +249,16 @@
 									</label>
 									<div class="caption">
 										<p>You will pay for your products when you received it</p>
+									</div>
+								</div>
+								<div class="input-radio">
+									<input type="radio" name="payment" id="payment-2">
+									<label for="payment-2">
+										<span></span>
+										Pay At The Shop
+									</label>
+									<div class="caption">
+										<p>You can go to our shop to take your product and pay directly to our salesman</p>
 									</div>
 								</div>
 							</div>

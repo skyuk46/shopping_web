@@ -309,10 +309,13 @@ def placeOrder(request):
         orderNote = request.GET.get('orderNote')
         for cart in carts :
             product = Products.objects.get(productCode = int(cart.product.productCode))
+            product.instock -= 1
+            product.sold += 1
+            product.save()
             cus = Customer.objects.get(username = username)
             Order(product_cart = product,customer = cus,orderedDate = orderedDate,shippedDate = shippedDate,status = status,address = address,city = city,country = country,orderNote = orderNote).save()
             cart.delete()
-        return HttpResponse('Your order has been placed. Thank you for Buying !')
+        return HttpResponse('Your order has been placed. Thank you for Buying ! (If there is nothing in your cart, there will be no order, do not worry')
 
 def feedback(request):
     

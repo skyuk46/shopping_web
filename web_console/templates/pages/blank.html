@@ -41,6 +41,11 @@
 							{% endif %}
 						</li>
 						<li><a href = "/customerRegister">Register</a></li>
+						<li> 
+							{% if user.username %}
+								<a href="/" > <i class = "fa fa-user-o"></i> {{ user.username }} </a>
+							{% endif %}
+						</li>
 						<li>
 							{% if user.username %}
 								<a href = "/logout">Logout</a>
