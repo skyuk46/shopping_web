@@ -298,10 +298,11 @@ def placeOrder(request):
         name = request.GET.get('first-name') + " " + request.GET.get('last-name')
         email = request.GET.get('email')
         phoneNumber = request.GET.get('tel')
-        if Customer.objects.get(username = username):
+        try:
+            Customer.objects.get(username = username)
             customer = Customer.objects.get(username = username)
             customer.numberOfPurchase = customer.numberOfPurchase + 1
-        else:
+        except:
             customer = Customer(username = username,name = name, email = email, phoneNumber = phoneNumber, numberOfPurchase = 1)
         customer.save()
 
